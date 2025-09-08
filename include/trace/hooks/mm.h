@@ -17,19 +17,21 @@
 #define _TRACE_HOOK_MM_H
 
 #include <trace/hooks/vendor_hooks.h>
+#include <../mm/slab.h>
+#include <linux/rwsem.h>
 
 #ifdef __GENKSYMS__
 #include <linux/types.h>
 #include <linux/mm.h>
 #include <linux/oom.h>
 #include <linux/rwsem.h>
-#include <../mm/slab.h>
 #endif
 
 struct oom_control;
 struct slabinfo;
 struct track;
 struct address_space;
+struct readahead_control;
 struct page_vma_mapped_walk;
 struct cma;
 struct compact_control;
@@ -95,6 +97,9 @@ DECLARE_HOOK(android_vh_free_unref_page_bypass,
 DECLARE_HOOK(android_vh_kvmalloc_node_use_vmalloc,
 	TP_PROTO(size_t size, gfp_t *kmalloc_flags, bool *use_vmalloc),
 	TP_ARGS(size, kmalloc_flags, use_vmalloc));
+DECLARE_HOOK(android_vh_customize_alloc_gfp,
+	TP_PROTO(gfp_t *alloc_gfp, unsigned int order),
+	TP_ARGS(alloc_gfp, order));
 DECLARE_HOOK(android_vh_should_alloc_pages_retry,
 	TP_PROTO(gfp_t gfp_mask, int order, int *alloc_flags,
 	int migratetype, struct zone *preferred_zone, struct page **page, bool *should_alloc_retry),
@@ -311,6 +316,10 @@ DECLARE_HOOK(android_vh_page_cache_miss,
 		pgoff_t start, pgoff_t len,
 		pgoff_t index, bool buffer),
 	TP_ARGS(file, start, len, index, buffer));
+DECLARE_HOOK(android_vh_init_adjust_zone_wmark,
+	TP_PROTO(struct zone *zone, u64 interval),
+	TP_ARGS(zone, interval));
+
 #endif /* _TRACE_HOOK_MM_H */
 
 /* This part must be outside protection */

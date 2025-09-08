@@ -3092,6 +3092,8 @@ static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
 
 	update_load_set(&se->load, weight);
 
+	trace_android_vh_reweight_entity(se);
+
 #ifdef CONFIG_SMP
 	do {
 		u32 divider = get_pelt_divider(&se->avg);
@@ -4371,6 +4373,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
 		vruntime -= thresh;
 	}
 
+	trace_android_rvh_place_entity(cfs_rq, se, initial, &vruntime);
 	/*
 	 * Pull vruntime of the entity being placed to the base level of
 	 * cfs_rq, to prevent boosting it if placed backwards.
@@ -4394,7 +4397,6 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
 		se->vruntime = vruntime;
 	else
 		se->vruntime = max_vruntime(se->vruntime, vruntime);
-	trace_android_rvh_place_entity(cfs_rq, se, initial, &vruntime);
 }
 
 static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
@@ -11884,7 +11886,10 @@ static int __sched_group_set_shares(struct task_group *tg, unsigned long shares)
 	 * We can't change the weight of the root cgroup.
 	 */
 	if (!tg->se[0])
-		return -EINVAL;
+	{
+		stop_fair_group = scale_load_down(shares);
+		return 0;
+	}
 
 	shares = clamp(shares, scale_load(MIN_SHARES), scale_load(MAX_SHARES));
 

@@ -58,6 +58,10 @@
   copy_from_kernel_nofault
   copy_fs_struct
   cpufreq_update_util_data
+  cpu_cgrp_subsys
+  css_task_iter_end
+  css_task_iter_next
+  css_task_iter_start
   __cpuhp_remove_state
   __cpuhp_setup_state
   __cpuhp_state_add_instance
@@ -423,6 +427,7 @@
   __traceiter_android_vh_account_task_time
   __traceiter_android_vh_add_page_to_lrulist
   __traceiter_android_vh_alloc_pages_slowpath
+  __traceiter_android_vh_init_adjust_zone_wmark
   __traceiter_android_vh_binder_del_ref
   __traceiter_android_vh_binder_free_proc
   __traceiter_android_vh_binder_has_special_work_ilocked
@@ -436,6 +441,9 @@
   __traceiter_android_vh_binder_proc_transaction
   __traceiter_android_vh_binder_proc_transaction_entry
   __traceiter_android_vh_binder_proc_transaction_finish
+  __traceiter_android_vh_binder_find_desc
+  __traceiter_android_vh_binder_set_desc_bit
+  __traceiter_android_vh_binder_desc_init
   __traceiter_android_vh_binder_read_done
   __traceiter_android_vh_binder_select_worklist_ilocked
   __traceiter_android_vh_binder_select_special_worklist
@@ -453,6 +461,7 @@
   __traceiter_android_vh_alloc_pages_reclaim_bypass
   __traceiter_android_vh_free_unref_page_bypass
   __traceiter_android_vh_kvmalloc_node_use_vmalloc
+  __traceiter_android_vh_customize_alloc_gfp
   __traceiter_android_vh_should_alloc_pages_retry
   __traceiter_android_vh_unreserve_highatomic_bypass
   __traceiter_android_vh_rmqueue_bulk_bypass
@@ -521,6 +530,8 @@
   __traceiter_android_vh_rwsem_opt_spin_start
   __traceiter_android_vh_rwsem_wake_finish
   __traceiter_android_vh_save_track_hash
+  __traceiter_android_vh_sched_move_task
+  __traceiter_android_vh_reweight_entity
   __traceiter_android_vh_sched_show_task
   __traceiter_android_vh_sched_stat_runtime_rt
   __traceiter_android_vh_show_mapcount_pages
@@ -570,6 +581,7 @@
   __tracepoint_android_vh_account_task_time
   __tracepoint_android_vh_add_page_to_lrulist
   __tracepoint_android_vh_alloc_pages_slowpath
+  __tracepoint_android_vh_init_adjust_zone_wmark
   __tracepoint_android_vh_binder_del_ref
   __tracepoint_android_vh_binder_free_proc
   __tracepoint_android_vh_binder_has_special_work_ilocked
@@ -583,6 +595,9 @@
   __tracepoint_android_vh_binder_proc_transaction
   __tracepoint_android_vh_binder_proc_transaction_entry
   __tracepoint_android_vh_binder_proc_transaction_finish
+  __tracepoint_android_vh_binder_find_desc
+  __tracepoint_android_vh_binder_set_desc_bit
+  __tracepoint_android_vh_binder_desc_init
   __tracepoint_android_vh_binder_read_done
   __tracepoint_android_vh_binder_select_worklist_ilocked
   __tracepoint_android_vh_binder_select_special_worklist
@@ -600,6 +615,7 @@
   __tracepoint_android_vh_alloc_pages_reclaim_bypass
   __tracepoint_android_vh_free_unref_page_bypass
   __tracepoint_android_vh_kvmalloc_node_use_vmalloc
+  __tracepoint_android_vh_customize_alloc_gfp
   __tracepoint_android_vh_should_alloc_pages_retry
   __tracepoint_android_vh_unreserve_highatomic_bypass
   __tracepoint_android_vh_rmqueue_bulk_bypass
@@ -668,6 +684,8 @@
   __tracepoint_android_vh_rwsem_opt_spin_start
   __tracepoint_android_vh_rwsem_wake_finish
   __tracepoint_android_vh_save_track_hash
+  __tracepoint_android_vh_sched_move_task
+  __tracepoint_android_vh_reweight_entity
   __tracepoint_android_vh_sched_show_task
   __tracepoint_android_vh_sched_stat_runtime_rt
   __tracepoint_android_vh_show_mapcount_pages
