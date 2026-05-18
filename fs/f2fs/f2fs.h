@@ -1236,7 +1236,7 @@ enum cp_reason_type {
 	CP_SPEC_LOG_NUM,
 	CP_RECOVER_DIR,
 	CP_DEDUPED,
-    CP_XATTR_DIR,
+	CP_XATTR_DIR,
 };
 
 enum iostat_type {
@@ -3275,6 +3275,7 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
 	case FI_SNAPSHOT_PREPARED:
 	case FI_SNAPSHOTED:
 #endif
+	case FI_ATOMIC_COMMITTED:
 		f2fs_mark_inode_dirty_sync(inode, true);
 	}
 }

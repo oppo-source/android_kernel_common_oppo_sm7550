@@ -871,7 +871,7 @@ static int f2fs_copy_data(struct inode *dst_inode,
 			f2fs_put_page(page, 1);
 			break;
 		}
-		memcpy_page(newpage, 0, page, 0, PAGE_SIZE);
+                memcpy_page(newpage, 0, page, 0, PAGE_SIZE);
 
 		set_page_dirty(newpage);
 		f2fs_put_page(newpage, 1);
@@ -2156,6 +2156,7 @@ static bool __found_offset(struct address_space *mapping,
 
 		compressed_cluster = first_blkaddr == COMPRESS_ADDR;
 	}
+
 	switch (whence) {
 	case SEEK_DATA:
 		if (__is_valid_data_blkaddr(blkaddr))
@@ -2826,8 +2827,7 @@ int f2fs_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
 				return err;
 		}
 #endif
-
-		/*
+        /*
 		 * wait for inflight dio, blocks should be removed after
 		 * IO completion.
 		 */
@@ -5634,6 +5634,11 @@ static int reserve_compress_blocks(struct dnode_of_data *dn, pgoff_t count,
 		}
 		to_reserved = cluster_size - compr_blocks - reserved;
 
+		to_reserved = cluster_size - compr_blocks - reserved;
+		if (time_to_inject(sbi, FAULT_COMPRESS_RESERVE_NOSPC)) {
+			f2fs_show_injection_info(sbi, FAULT_COMPRESS_RESERVE_NOSPC);
+			return -ENOSPC;
+		}
 		/* for the case all blocks in cluster were reserved */
 		if (reserved && to_reserved == 1) {
 			dn->ofs_in_node += cluster_size;
@@ -5669,6 +5674,8 @@ int f2fs_reserve_compress_blocks(struct inode *inode, unsigned int *ret_rsvd_blk
 	int ret;
 
 	f2fs_bug_on(sbi, !inode_is_locked(inode));
+	if (!f2fs_sb_has_compression(sbi))
+		return -EOPNOTSUPP;
 
 	if (!is_inode_flag_set(inode, FI_COMPRESS_RELEASED))
 		return -EINVAL;
@@ -6291,9 +6298,6 @@ static int f2fs_ioc_compress_file(struct file *filp, unsigned long arg)
 	int cluster_size = F2FS_I(inode)->i_cluster_size;
 	int count, ret;
 
-	if (is_vts_test(filp))
-		return 0;
-
 	if (!f2fs_sb_has_compression(sbi) || !may_compress ||
 			F2FS_OPTION(sbi).compress_mode != COMPR_MODE_USER)
 		return -EOPNOTSUPP;
@@ -6322,7 +6326,8 @@ static int f2fs_ioc_compress_file(struct file *filp, unsigned long arg)
 		inode->i_ino, file_dentry(filp), i_size_read(inode),
 		inode->i_blocks, is_inode_flag_set(inode, FI_COMPRESS_RELEASED));
 
-	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
+	if (!f2fs_compressed_file(inode) ||
+		is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
 		ret = -EINVAL;
 		goto out;
 	}

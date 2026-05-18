@@ -4380,6 +4380,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
 	}
 	trace_android_rvh_place_entity(cfs_rq, se, initial, &vruntime);
 
+	trace_android_rvh_place_entity(cfs_rq, se, initial, &vruntime);
 	/*
 	 * Pull vruntime of the entity being placed to the base level of
 	 * cfs_rq, to prevent boosting it if placed backwards.
